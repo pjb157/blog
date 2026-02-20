@@ -1,0 +1,42 @@
+---
+layout: default
+---
+
+<div class="home">
+  <section class="hero">
+    <h1 class="hero-title glitch" data-text="{{ site.title }}">{{ site.title }}</h1>
+    <p class="hero-description">{{ site.description }}</p>
+  </section>
+
+  <section class="posts-list">
+    <h2 class="section-title">Recent Posts</h2>
+
+    {% if site.posts.size > 0 %}
+    <div class="posts-grid">
+      {% for post in site.posts limit:6 %}
+      <article class="post-card">
+        <a href="{{ post.url | relative_url }}" class="post-card-link">
+          <time class="post-date">{{ post.date | date: "%b %d, %Y" }}</time>
+          <h3 class="post-card-title">{{ post.title }}</h3>
+          {% if post.excerpt %}
+          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+          {% endif %}
+          {% if post.tags %}
+          <div class="post-tags">
+            {% for tag in post.tags limit:3 %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <span class="read-more">Read more →</span>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-posts">No posts yet. Stay tuned!</p>
+    {% endif %}
+  </section>
+
+  {{ content }}
+</div>

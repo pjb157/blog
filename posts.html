@@ -1,0 +1,100 @@
+---
+layout: default
+title: posts
+permalink: /posts/
+---
+
+<div class="posts">
+  <h1 class="glitch" data-text="posts">posts</h1>
+  <p class="posts-description">All posts, sorted by date.</p>
+
+  {% if site.posts.size > 0 %}
+  <div class="posts-list">
+    {% for post in site.posts %}
+    {% assign current_year = post.date | date: "%Y" %}
+    {% assign previous_year = post.previous.date | date: "%Y" %}
+
+    {% if current_year != previous_year %}
+    <h2 class="posts-year">{{ current_year }}</h2>
+    {% endif %}
+
+    <article class="posts-item">
+      <time class="posts-date">{{ post.date | date: "%b %d" }}</time>
+      <a href="{{ post.url | relative_url }}" class="posts-link">
+        {{ post.title }}
+      </a>
+      {% if post.tags %}
+      <div class="post-tags">
+        {% for tag in post.tags limit:3 %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="no-posts">No posts yet. Stay tuned!</p>
+  {% endif %}
+</div>
+
+<style>
+.posts {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.posts-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+  font-size: 1.1rem;
+}
+
+.posts-year {
+  color: var(--accent-cyan);
+  font-size: 1.5rem;
+  margin: var(--spacing-xl) 0 var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--border-color);
+  text-shadow: var(--glow-cyan);
+}
+
+.posts-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.posts-item:hover {
+  background: var(--bg-secondary);
+}
+
+.posts-date {
+  font-family: var(--font-mono);
+  color: var(--accent-purple);
+  font-size: 0.9rem;
+}
+
+.posts-link {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.posts-item:hover .posts-link {
+  color: var(--accent-cyan);
+}
+
+@media (max-width: 768px) {
+  .posts-item {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xs);
+  }
+
+  .posts-date {
+    font-size: 0.85rem;
+  }
+}
+</style>
