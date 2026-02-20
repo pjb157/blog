@@ -3,7 +3,7 @@ title: Bit by Bit
 description: Peter Bhabra's blog.
 author: Peter Bhabra
 url: "https://pjb157.github.io"
-baseurl: ""
+baseurl: "/blog"
 
 # Build settings
 markdown: kramdown
