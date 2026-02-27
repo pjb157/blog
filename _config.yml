@@ -42,7 +42,3 @@ exclude:
   - node_modules
   - vendor
   - README.md
-  - cv/package.json
-  - cv/package-lock.json
-  - cv/dist
-  - cv/node_modules
