@@ -1,0 +1,34 @@
+---
+layout: default
+title: about
+permalink: /about/
+---
+
+{% assign cv = site.data.resume %}
+
+<div class="about">
+
+  <p class="about-summary">{{ cv.basics.summary }} <a href="{{ '/cv/public/' | relative_url }}" target="_blank" rel="noopener">Full CV →</a></p>
+
+  <h2>Work</h2>
+
+  {% for job in cv.work %}
+  <div class="about-job">
+    <div class="about-job-header">
+      <span class="about-job-company">{{ job.name }}</span>
+      <span class="about-job-title">{{ job.position }}</span>
+    </div>
+    <p class="about-job-summary">{{ job.summary }}</p>
+  </div>
+  {% endfor %}
+
+  <h2>Education</h2>
+
+  {% for edu in cv.education %}
+  <div class="about-edu">
+    <span class="about-edu-degree">{{ edu.studyType }}, {{ edu.area }}</span>
+    <span class="about-edu-school">{{ edu.institution }}</span>
+  </div>
+  {% endfor %}
+
+</div>

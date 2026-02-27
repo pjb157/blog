@@ -1,9 +1,9 @@
 # Site settings
-title: Bit by Bit
+title: Peter Bhabra
 description: Peter Bhabra's blog.
 author: Peter Bhabra
-url: "https://pjb157.github.io"
-baseurl: "/blog"
+url: "https://peterbhabra.com"
+baseurl: ""
 
 # Build settings
 markdown: kramdown
@@ -42,3 +42,7 @@ exclude:
   - node_modules
   - vendor
   - README.md
+  - cv/package.json
+  - cv/package-lock.json
+  - cv/dist
+  - cv/node_modules

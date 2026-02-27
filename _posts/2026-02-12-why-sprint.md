@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Stop Counting Story Points and Start Pointing Stories
-date: 2025-12-26
+date: 2026-02-12
 tags: [management, agile]
 ---
 

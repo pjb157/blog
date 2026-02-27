@@ -1,23 +1,9 @@
 <footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-section">
-      <p class="footer-description">{{ site.description }}</p>
-    </div>
-
-    <div class="footer-section">
-      <h3>Connect</h3>
-      <ul class="social-links">
-        <li><a href="https://www.linkedin.com/in/peter-bhabra/" target="_blank" rel="noopener">LinkedIn</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-section">
-      <h3>Subscribe</h3>
-      <a href="{{ '/feed.xml' | relative_url }}" class="rss-link">RSS Feed</a>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <p>&copy; {{ 'now' | date: "%Y" }} {{ site.author }}. All rights reserved.</p>
+  <div class="footer-inner">
+    <span>&copy; {{ 'now' | date: "%Y" }} {{ site.author }}</span>
+    <ul class="footer-links">
+      <li><a href="https://www.linkedin.com/in/peter-bhabra/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="{{ '/feed.xml' | relative_url }}">RSS</a></li>
+    </ul>
   </div>
 </footer>
