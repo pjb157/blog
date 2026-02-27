@@ -1,0 +1,120 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Peter Bhabra",
+    "label": "Principal Software Engineer | AI/ML & Distributed Systems",
+    "image": "",
+    "email": "peter.bhabra@gmail.com",
+    "url": "https://github.com/pjb157",
+    "summary": "Software engineer with technical leadership experience in AI infrastructure and distributed systems. Currently leading inference platform development at Doubleword. Previously built high-availability data platforms processing 1M+ files daily at CMR Surgical.",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "London",
+      "countryCode": "GB",
+      "region": "United Kingdom"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "peter-bhabra",
+        "url": "https://www.linkedin.com/in/peter-bhabra/"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Doubleword",
+      "position": "Member of Technical Staff - 2023 to Present",
+      "summary": "Principal engineer driving AI inference platform development. Drive architecture decisions and technical direction for generative AI products.",
+      "highlights": [
+        "Drive technical direction and quarterly planning. Manage sprint processes, delivery timelines, and cross-functional initiatives.",
+        "Developed a production inference engine supporting real-time and batch workloads with custom scheduling and resource management.",
+        "Engineered an AI gateway achieving 450x throughput improvement over existing solutions through connection pooling and request batching.",
+        "Architected a resilient, cost-effective batched inference platform for non-realtime workloads.",
+        "Led client engagements and deployed production LLM APIs and RAG applications across multiple environments.",
+        "Built a Rust-based inference engine using Candle for stable diffusion models, demonstrating low-level ML systems expertise.",
+        "Created the internal DevOps ecosystem spanning release publishing through client deployments.",
+        "Managed Kubernetes infrastructure including self-hosted clusters for CI/CD. Built Helm charts, custom operators, and deployment automation."
+      ]
+    },
+    {
+      "name": "CMR Surgical",
+      "position": "Graduate Software Engineer - 2021 to 2023",
+      "url": "https://cmrsurgical.com",
+      "summary": "Worked within an agile, high-performing team delivering scalable data platforms using AWS serverless microservice architecture.",
+      "highlights": [
+        "Built and maintained data platforms processing over one million files per day",
+        "Reduced AWS monthly costs from $60,000 to $35,000 (42% reduction) within one month",
+        "Built HTTP Live Streaming and fine-grained permissions systems from scratch using Open Policy Agent",
+        "Led team projects including facilitating collaboration sessions, breaking down ideas into executable stories, and quarterly planning",
+        "Worked with telemetry and video data to deliver customer insights with frontend teams",
+        "Utilized CI/CD techniques with TeamCity and GitlabCI for reliable releases across multiple deployment environments",
+        "Developed AWS serverless applications using microservice architecture"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Durham University",
+      "url": "https://durham.ac.uk",
+      "area": "Scientific Computing and Data Analysis - First Class Honours",
+      "studyType": "Master of Science",
+      "courses": []
+    },
+    {
+      "institution": "Durham University",
+      "url": "https://durham.ac.uk",
+      "area": "Physics - First Class Honours",
+      "studyType": "Bachelor of Science",
+      "courses": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "Software Engineering & Distributed Systems",
+      "keywords": [
+        "Python",
+        "Rust",
+        "Microservices",
+        "Event-driven",
+        "API Design",
+        "Low-latency Systems",
+        "Concurrency",
+        "Performance Optimization"
+      ]
+    },
+    {
+      "name": "AI/ML & Inference",
+      "keywords": [
+        "LLM Infrastructure",
+        "Inference Optimization",
+        "RAG",
+        "PyTorch","Candle"
+      ]
+    },
+    {
+      "name": "DevOps & Infrastructure",
+      "keywords": [
+        "Kubernetes",
+        "Helm",
+        "Docker",
+        "AWS","GCP","Azure",
+        "Serverless",
+        "CI/CD"
+      ]
+    },
+    {
+      "name": "Public Speaking",
+      "keywords": [
+        "Cloud Native London",
+        "Data & AI Community Stack Meetup"
+      ]
+    }
+  ],
+  "meta": {
+    "canonical": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2024-01-01T00:00:00"
+  }
+}
