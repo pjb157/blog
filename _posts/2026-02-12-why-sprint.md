@@ -3,6 +3,7 @@ layout: post
 title: Stop Counting Story Points and Start Pointing Stories
 date: 2026-02-12
 tags: [management, agile]
+image: /assets/images/sprint.jpg
 ---
 
 Since the advent of agile project management, you'll struggle to find a software delivery team not using some artifact of the SCRUM framework. There are numerous articles documenting how to run the processes that form agile frameworks, but often overlooked is the reason why. Frameworks without a deep understanding of their purpose waste everyone's time.

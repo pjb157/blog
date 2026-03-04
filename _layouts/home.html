@@ -10,25 +10,34 @@ layout: default
   </div>
 
   <nav class="landing-nav">
-    <a href="{{ '/posts' | relative_url }}" class="landing-card">
-      <span class="landing-card-label">posts</span>
-      <span class="landing-card-desc">Writing on engineering, management, and ideas</span>
+    <a href="{{ '/posts' | relative_url }}" class="landing-link">
+      <span class="landing-link-label">posts <span class="landing-link-arrow">→</span></span>
+      <span class="landing-link-desc">Writing on engineering, management, and ideas</span>
     </a>
-    <a href="{{ '/about' | relative_url }}" class="landing-card">
-      <span class="landing-card-label">about</span>
-      <span class="landing-card-desc">Background, work history, and skills</span>
+    <a href="{{ '/about' | relative_url }}" class="landing-link">
+      <span class="landing-link-label">about <span class="landing-link-arrow">→</span></span>
+      <span class="landing-link-desc">Background and work history</span>
     </a>
   </nav>
 
   {% if site.posts.size > 0 %}
   <div class="landing-recent">
     <h2 class="landing-section-title">recent</h2>
-    {% for post in site.posts limit:3 %}
-    <article class="landing-post">
-      <time class="landing-post-date">{{ post.date | date: "%b %d, %Y" }}</time>
-      <a href="{{ post.url | relative_url }}" class="landing-post-title">{{ post.title }}</a>
-    </article>
-    {% endfor %}
+    <div class="landing-grid">
+      {% for post in site.posts limit:2 %}
+      <a href="{{ post.url | relative_url }}" class="landing-card">
+        {% if post.image %}
+        <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" class="landing-card-img">
+        {% else %}
+        <div class="landing-card-img landing-card-img--empty"></div>
+        {% endif %}
+        <div class="landing-card-meta">
+          <time class="landing-card-date">{{ post.date | date: "%b %d, %Y" }}</time>
+          <span class="landing-card-title">{{ post.title }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
   </div>
   {% endif %}
 
