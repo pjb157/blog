@@ -2,25 +2,26 @@
 layout: post
 title: "The swarm that designs itself: building the Doubleword Agent Swarm"
 date: 2026-06-16
+description: "I rebuilt Moonshot's Kimi agent swarm on open weights and pointed it at a real codebase: ~53× fewer tokens and ~45× cheaper than one long-context agent."
 tags: [ai, agents, inference, kimi]
 image: /assets/images/bees.jpg
 ---
 
-Faced with a hard task, the instinct is to reach for more: a smarter model, a longer context window, one capable agent that can hold the whole problem in its head at once. The entire frontier is racing along that axis, chasing more intelligence and more context, and it has handed us a genuinely great tool. For deep, sequential problems, a single long-context agent is a superb one: the best hammer we've ever had.
+Faced with a hard task, the instinct is to reach for more: a smarter model, a longer context window, one capable agent that can hold the whole problem in its head at once. The entire frontier is racing along that axis, chasing more intelligence and more context, and it has handed me a great tool. For deep, sequential problems, a single long-context agent is a superb one: the best hammer I've ever had.
 
-And so we reach for it for everything. When it can't crack a task, the reflex isn't to ask whether a hammer was the right tool. It's to reach for a bigger one: wait for the next model, with a longer window and a higher benchmark. But hand someone a hammer and everything starts to look like a nail. Some tasks were never nails.
+And so I reach for it for everything. When it can't crack a task, the reflex isn't to ask whether a hammer was the right tool. It's to reach for a bigger one: wait for the next model, with a longer window and a higher benchmark. But hand someone a hammer and everything starts to look like a nail. Some tasks were never nails.
 
 So is there another way? For one shape of work, very much so. A lot of real work isn't deep and sequential. It's *wide and shardable*: audit every file in this repo, review every dependency, document every subsystem, check every source. Point a single long-context agent at that and it'll get there, but you will pay dearly for the privilege.
 
-So we built the [Doubleword Agent Swarm](https://github.com/doublewordai/swarm), our open-source reimplementation of the agent swarm Moonshot introduced in the [Kimi K2.5 report](https://arxiv.org/abs/2602.02276): an LLM orchestrator **designs its own team** of bounded-context workers and fans them out in parallel over a task. This post is the story of how we built it, and what happened when we pointed it at a real codebase, side by side with a single long-context agent.
+That question is why I built the [Doubleword Agent Swarm](https://github.com/doublewordai/swarm), my open-source reimplementation of the agent swarm Moonshot introduced in the [Kimi K2.5 report](https://arxiv.org/abs/2602.02276): an LLM orchestrator **designs its own team** of bounded-context workers and fans them out in parallel over a task. This post is the story of how I built it, and what happened when I pointed it at a real codebase, side by side with a single long-context agent.
 
-The short version: for wide, shardable work, a swarm of bounded agents beats one long-context agent on cost and on output. The model designs the team. We build the scaffolding, and it's small.
+The short version: for wide, shardable work, a swarm of bounded agents beats one long-context agent on cost and on output. The model designs the team. I build the scaffolding, and it's small.
 
 ## What the hammer costs
 
-To make it concrete, we picked a job we actually needed done: a security audit of [control-layer](https://github.com/doublewordai/control-layer), our open-source AI gateway: 512 source files, about 2.4M tokens of unique source. Find real vulnerabilities: injection, leaked secrets, broken auth, unsafe file handling. Same task, two ways.
+To make it concrete, I picked a job I actually needed done: a security audit of [control-layer](https://github.com/doublewordai/control-layer), Doubleword's open-source AI gateway: 512 source files, about 2.4M tokens of unique source. Find real vulnerabilities: injection, leaked secrets, broken auth, unsafe file handling. Same task, two ways.
 
-First, the hammer: a single agent on Claude Opus with a 1M-token window, no chunking, just "audit the repo". The problem isn't that it can't. The problem is what it costs. An agent loop re-sends the growing transcript with every turn, so by the time our metered run had covered ~7% of the repo, it had already burned 27.7M tokens, 95% of them cache reads, the same transcript shipped back again and again.[^1] Projected over the full repo, the audit lands around **300M tokens**: a 2.4M-token codebase, amplified ×125.
+First, the hammer: a single agent on Claude Opus with a 1M-token window, no chunking, just "audit the repo". The problem isn't that it can't. The problem is what it costs. An agent loop re-sends the growing transcript with every turn, so by the time my metered run had covered ~7% of the repo, it had already burned 27.7M tokens, 95% of them cache reads, the same transcript shipped back again and again.[^1] Projected over the full repo, the audit lands around **300M tokens**: a 2.4M-token codebase, amplified ×125.
 
 [^1]: A real metered run, not a thought experiment. The agent repeatedly fills its window, hits the compaction ceiling, summarises, and grows again. With prompt caching, the projected full-repo bill is ~$300; without it, ~$1,800.
 
@@ -40,29 +41,29 @@ Reading the codebase costs 2.4M tokens, once. *Re-reading it* is the bill.
 
 ## The alternative: a swarm
 
-The waste was never the reading. It was the *re*-reading: one context dragging the whole codebase along on every turn. So the fix almost writes itself. Don't hand the whole repo to a single agent at all; split it across many bounded workers, each reading only its own slice, once, all at the same time. That's an agent swarm.
+The waste was never the reading. It was the *re*-reading: one context dragging the whole codebase along on every turn. The fix almost writes itself. Don't hand the whole repo to a single agent at all; split it across many bounded workers, each reading only its own slice, once, all at the same time. That's an agent swarm.
 
 It's the paradigm every company already runs on. The CEO is the most capable (and most expensive) person in the building, and exactly the wrong one to personally trawl through every file. So they don't: they hire specialists with tight remits, hand each a bounded task, and never see the mountain of material those specialists wade through. What comes back is a short, high-level summary: the result, not the raw work. Same setup here, just with agents: the orchestrator plays CEO, the workers are its specialists, and only their conclusions ever travel back up.
 
 That's the whole idea. The interesting question is who designs the team.
 
-In February 2026, Moonshot published the Kimi K2.5 technical report.[^2] Its agent-swarm result is the framework we built on: scale *out*, not just up. A trainable orchestrator spawns specialised sub-agents and runs them in parallel, trained with PARL (Parallel-Agent Reinforcement Learning), where only the orchestrator learns and the sub-agents stay frozen. The headline numbers: 4.5× lower latency than a single agent, and +17.8 points on BrowseComp.[^3] The part we found genuinely new: **the swarm designs itself**. Decomposition and team width are the model's call, not a hand-written workflow.
+In February 2026, Moonshot published the Kimi K2.5 technical report.[^2] Its agent-swarm result is the framework I built on: scale *out*, not just up. A trainable orchestrator spawns specialised sub-agents and runs them in parallel, trained with PARL (Parallel-Agent Reinforcement Learning), where only the orchestrator learns and the sub-agents stay frozen. The headline numbers: 4.5× lower latency than a single agent, and +17.8 points on BrowseComp.[^3] The part I found genuinely new: **the swarm designs itself**. Decomposition and team width are the model's call, not a hand-written workflow.
 
 [^2]: [Kimi K2.5: Visual Agentic Intelligence](https://arxiv.org/abs/2602.02276), Kimi Team, February 2026. See also Moonshot's [agent swarm post](https://www.kimi.com/blog/agent-swarm).
 
 [^3]: 60.6 → 78.4 on BrowseComp, a deep-research benchmark, versus the single-agent baseline.
 
-Then the catch. What's in the weights is the orchestration *instinct*: how to decompose, delegate, reconcile. The runtime that makes a swarm real (spawn, isolate, parallelise, aggregate) lives in Moonshot's hosted product, not in the open weights. An open endpoint gives us exactly what it has always given us: messages and tools in, tool calls and text out.
+Then the catch. What's in the weights is the orchestration *instinct*: how to decompose, delegate, reconcile. The runtime that makes a swarm real (spawn, isolate, parallelise, aggregate) lives in Moonshot's hosted product, not in the open weights. An open endpoint gives me exactly what it has always given me: messages and tools in, tool calls and text out.
 
-So that became the project: the weights bring the instinct, we build the body. [doublewordai/swarm](https://github.com/doublewordai/swarm) is that body, our from-scratch interpretation of Moonshot's swarm, built on the [Open Responses API](https://openresponses.org), model-agnostic (default: `moonshotai/Kimi-K2.6`).[^credit]
+So that became the project: the weights bring the instinct, I build the body. [doublewordai/swarm](https://github.com/doublewordai/swarm) is that body, my from-scratch interpretation of Moonshot's swarm, built on the [Open Responses API](https://openresponses.org), model-agnostic (default: `moonshotai/Kimi-K2.6`).[^credit]
 
-[^credit]: Full credit to Moonshot for the pattern. The repo's README has a ["Faithful to Kimi"](https://github.com/doublewordai/swarm#faithful-to-kimi) section spelling out what we reproduced (the self-designing orchestrator, context sharding, the critical-steps metric), what we deliberately dropped (PARL training, the mutating toolbox), and what's ours.
+[^credit]: Full credit to Moonshot for the pattern. The repo's README has a ["Faithful to Kimi"](https://github.com/doublewordai/swarm#faithful-to-kimi) section spelling out what I reproduced (the self-designing orchestrator, context sharding, the critical-steps metric), what I deliberately dropped (PARL training, the mutating toolbox), and what's mine.
 
 ## The architecture
 
-Everything we kept from the paper, and everything we added, compresses to four principles:
+Everything I kept from the paper, and everything I added, compresses to four principles:
 
-1. **A self-designing orchestrator.** The model decides the team and the decomposition, not us.
+1. **A self-designing orchestrator.** The model decides the team and the decomposition, not me.
 2. **Bounded local context.** Each worker sees only its slice, and returns only results.
 3. **Structural anti-groupthink.** Independent verification before any finding counts.
 4. **Synthesis.** One final pass reconciles everything into a deliverable.
@@ -117,7 +118,7 @@ Left to right: the repo is cloned and compressed into a budgeted map; the orches
 
 ### Block 1: the orchestrator designs the team
 
-The orchestrator gets the repo map up front and can probe with `read_file` and `grep` before committing to a plan. Then it builds its team with two tools, `create_subagent(name, system_prompt)` and `assign_task(agent, prompt)`, the literal tool surface Kimi K2.5/K2.6 were RL-trained on.[^4] It authors each specialist's system prompt itself. In one real audit run it invented a persona we never asked for:
+The orchestrator gets the repo map up front and can probe with `read_file` and `grep` before committing to a plan. Then it builds its team with two tools, `create_subagent(name, system_prompt)` and `assign_task(agent, prompt)`, the literal tool surface Kimi K2.5/K2.6 were RL-trained on.[^4] It authors each specialist's system prompt itself. In one real audit run it invented a persona I never asked for:
 
 ```python
 # the orchestrator wrote this prompt (persona registered once)
@@ -131,7 +132,7 @@ assign_task("injection-filesystem", "Audit cli.py …")
 assign_task("injection-filesystem", "Trace cost.py …")
 ```
 
-[^4]: K2.5 technical report, Appendix E.8: this is `--interface kimi`, which the repo ships as the default. We also ship `--interface structured`, where the orchestrator instead calls `dispatch_workers([{role, focus, paths}])` and the harness preloads each worker's files, decomposing by directory rather than by task, which keeps the planning turn small on very large repos.
+[^4]: K2.5 technical report, Appendix E.8: this is `--interface kimi`, which the repo ships as the default. I also ship `--interface structured`, where the orchestrator instead calls `dispatch_workers([{role, focus, paths}])` and the harness preloads each worker's files, decomposing by directory rather than by task, which keeps the planning turn small on very large repos.
 
 The division of labour matters: the model decides *who* does *what*; the harness decides which tools each role may hold. Each dispatching turn is a wave: width is parallelism, follow-up waves fill gaps.
 
@@ -145,11 +146,11 @@ Context integrity and cost turn out to be the same lever pulled once: no single 
 
 A swarm of enthusiastic hunters produces enthusiastic false positives. So before anything counts, each candidate finding is handed to an independent verifier whose only job is to **refute it**, and which defaults to "not real" when unsure. Survivors ship with adjusted severity; refuted findings are dropped and counted.
 
-This stage is our addition; the paper's orchestrator reconciles inline. It's optional and per-brief; `--verify-votes N` turns it into a majority-vote panel. Adding an extra independent verification agent reduces false positives.
+This stage is my addition; the paper's orchestrator reconciles inline. It's optional and per-brief; `--verify-votes N` turns it into a majority-vote panel.
 
 ### Block 4: one pass writes the report
 
-Finally, a single tool-free synthesis call reconciles the confirmed findings into the deliverable: `report.md` for humans, `findings.json` for machines. Its shape comes from the brief, not the engine, which brings us to the part we like most.
+Finally, a single tool-free synthesis call reconciles the confirmed findings into the deliverable: `report.md` for humans, `findings.json` for machines. Its shape comes from the brief, not the engine, which brings me to the part I like most.
 
 ## Swap the brief, keep the engine
 
@@ -172,7 +173,7 @@ register(Brief(
 ))
 ```
 
-Two briefs ship in the box, `audit` and `onboarding`, and the ones we could write are an afternoon each: a dependency review (one worker per dependency: version drift, advisories, upgrade risk), a refactor plan (workers map usage per module, the synthesizer sequences the steps), wide research (one worker per source; verifiers refute unsupported claims).
+Two briefs ship in the box, `audit` and `onboarding`, and the ones I could write are an afternoon each: a dependency review (one worker per dependency: version drift, advisories, upgrade risk), a refactor plan (workers map usage per module, the synthesizer sequences the steps), wide research (one worker per source; verifiers refute unsupported claims).
 
 ## The receipts
 
@@ -196,11 +197,11 @@ Same repo, same task, both ways:
 <figcaption style="text-align:center;color:#8a7f70;font-size:0.85rem;font-style:italic;margin-top:0.6rem;font-family:-apple-system,system-ui,sans-serif">The same audit: the solo agent's projected ~300M tokens against the swarm's measured 5.6M, about 53× fewer.</figcaption>
 </figure>
 
-The swarm's run, measured: 348 API calls, 5.2M tokens in, ~450k out, about **53× fewer tokens and 45× cheaper** at Doubleword's Kimi K2.6 pricing ($0.95/M input, $4/M output).[^5] And the output is the part we actually cared about: 34 candidate findings, 16 refuted by the verifier stage, **18 confirmed real vulnerabilities**, each with severity, `file:line`, and a suggested fix. The 16 refuted candidates are noise that never reached a human.
+The swarm's run, measured: 348 API calls, 5.2M tokens in, ~450k out, about **53× fewer tokens and 45× cheaper** at Doubleword's Kimi K2.6 pricing ($0.95/M input, $4/M output).[^5] And the output held up: the verifier stage refuted and dropped roughly half of the candidate findings before any of them reached me, so what survived came with severity, `file:line`, and a suggested fix attached.
 
 [^5]: Solo figures are projected from the metered partial run, with prompt caching priced in; swarm figures are measured. Every run also writes `summary.json` with tokens, cost, coverage, and the paper's critical-vs-total step counts: `speedup = total / critical` scores how well the orchestrator actually parallelised, the way the paper scores it.
 
-## The last 30%: nobody is waiting
+## Nobody's waiting: the flex tier
 
 One more flag. A swarm is the definition of a [just-get-it-done workload](https://blog.doubleword.ai/inference-when-no-one-is-waiting): hundreds of concurrent calls and no human watching any single one. The workload is throughput-bound, not latency-bound: what matters is when the whole wave lands, not when each call does.
 
@@ -234,6 +235,6 @@ dw project run report                                                   # print 
 
 Each run writes `results/<brief>-<slug>/`: the synthesized `report.md`, structured `findings.json`, `swarm-tree.json` (the team the orchestrator designed, worth reading at least once), and `summary.json` with tokens, cost, and step counts.
 
-Everything is open: the harness is [on GitHub](https://github.com/doublewordai/swarm), it speaks the [Open Responses API](https://openresponses.org), and it's model-agnostic: `-m` any tool-caller you like, ours or otherwise.
+Everything is open: the harness is [on GitHub](https://github.com/doublewordai/swarm), it speaks the [Open Responses API](https://openresponses.org), and it's model-agnostic: `-m` any tool-caller you like, Doubleword's or otherwise.
 
-We built [Doubleword](https://doubleword.ai) for exactly this kind of high-throughput inference, and we'd love to see what you fan out. Clone the swarm, write a brief, and go run parallel agents.
+[Doubleword](https://doubleword.ai) is built for exactly this kind of high-throughput inference, and I'd love to see what you fan out. Clone the swarm, write a brief, and go run parallel agents.
