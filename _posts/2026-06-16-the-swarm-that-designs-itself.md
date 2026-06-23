@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The swarm that designs itself: building the Doubleword Agent Swarm"
+title: "The swarm that designs itself"
 date: 2026-06-16
 description: "I rebuilt Moonshot's Kimi agent swarm and pointed it at a real codebase: ~53× fewer tokens and ~45× cheaper than one long-context agent."
 tags: [ai, agents, inference, kimi]
