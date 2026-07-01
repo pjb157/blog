@@ -4,7 +4,7 @@ title: "The swarm that designs itself"
 date: 2026-06-16
 description: "I rebuilt Moonshot's Kimi agent swarm and pointed it at a real codebase: ~53× fewer tokens and ~45× cheaper than one long-context agent."
 tags: [ai, agents, inference, kimi]
-image: /assets/images/bees.jpg
+image: /assets/images/bees-styled.jpg
 ---
 
 Faced with a hard task, the instinct is to reach for more: a smarter model, a longer context window, one capable agent that can hold the whole problem in its head at once. The entire frontier is racing along that axis, chasing more intelligence and more context, and it has handed me a great tool. For deep, sequential problems, a single long-context agent is a superb one: the best hammer I've ever had.
