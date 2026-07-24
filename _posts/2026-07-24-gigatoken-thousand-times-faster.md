@@ -44,7 +44,7 @@ Gigatoken sustained roughly 168 to 238 million tokens per second as the batch gr
 
 My service cannot hand Gigatoken an 11.9 GB file and disappear. It receives bounded requests, preserves segment boundaries, returns nested results and pays for HTTP, serialisation and scheduling. The baseline is also called through its native Rust interface, so Gigatoken cannot win by removing Python overhead that was never present.
 
-Small requests expose fixed costs. Segmentation limits how freely work can be divided. At the HTTP boundary, faster tokenization leaves a larger fraction of time in everything surrounding it. Amdahl's law arrives quickly when the accelerated part becomes fast enough.
+Small requests expose fixed costs. Segmentation limits how freely work can be divided. At the HTTP boundary, faster tokenization leaves a larger fraction of time in everything surrounding it. This is [Amdahl's law](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#strong-scaling-and-amdahl-s-law): speeding up one part of a system has diminishing effect once the unchanged work dominates the total time.
 
 The 1,000x headline did not survive this workload. The million-token segmented case was **37.6x faster**, cutting core processing time from about 159ms to 4ms while preserving every token ID. That is an impressive engineering result and a useful production result. Gigatoken does not need the broad 1,000x claim to be worth taking seriously.
 
