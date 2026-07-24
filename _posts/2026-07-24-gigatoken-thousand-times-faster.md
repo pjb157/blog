@@ -17,8 +17,6 @@ I measured between **30x and 42x** in the tokenizer core. That is a large improv
 
 Tokenization looks sequential. Split text into pieces, merge byte pairs, emit token IDs. The normal implementation is already fast Rust, but parts of its hot path still behave like general software. A regex engine performs pretokenization. Bounds checks and unpredictable branches sit inside tight loops. Threads exchange work. Language bindings move data between Python and Rust.
 
-Gigatoken treats those costs as the problem.
-
 Its pretokenizers replace general regex execution with specialised state machines. Lookup tables classify bytes directly. SWAR and architecture-specific SIMD inspect several bytes per instruction. Common byte-pair results are cached so repeated words can skip most of the merge work. The implementation also works hard to keep branches predictable, memory local and workers independent.[^implementation]
 
 There is a second source of speed in the headline benchmark. The native API reads a large file directly and finds safe boundaries where it can divide the stream between cores. This removes Python data conversion and gives the scheduler an enormous, regular slab of work. On a 144-core AMD EPYC machine, Gigatoken reports 24.53 GB/s for GPT-2 against 24.8 MB/s for Hugging Face, or 989x. On an Apple M4 Max it reports 8.79 GB/s against 6.9 MB/s, or 1,268x.[^benchmark]
