@@ -7,7 +7,7 @@ tags: [ai, performance, tokenization]
 image: /assets/images/gigatoken-cover.webp
 ---
 
-[Gigatoken](https://github.com/marcelroed/gigatoken) claims to be roughly **1,000 times faster** than Hugging Face Tokenizers. The implementation is impressive, but that headline needs a narrower label.
+[Gigatoken](https://github.com/marcelroed/gigatoken) claims to be roughly **1,000 times faster** than Hugging Face Tokenizers. The implementation is impressive, but 1,000x does not describe the speedup I measured.
 
 Gigatoken's figure measures its fastest path over an 11.9 GB OpenWebText file. My use case is an online tokenizer: mixed text, requests ranging up to a one-million-token context window, sometimes split into 1,024 segments, with an HTTP boundary around the work.
 
@@ -15,13 +15,13 @@ I measured between **30x and 42x** in the tokenizer core. That is a large improv
 
 ## Where the thousand comes from
 
-Tokenization looks sequential. Split text into pieces, merge byte pairs, emit token IDs. The normal implementation is already fast Rust, but parts of its hot path still behave like general software. A regex engine performs pretokenization. Bounds checks and unpredictable branches sit inside tight loops. Threads exchange work. Language bindings move data between Python and Rust.
+A tokenizer splits text into pieces, repeatedly merges byte pairs and emits token IDs. The normal implementation is already fast Rust, but parts of its hot path still behave like general software. A regex engine performs pretokenization. Bounds checks and unpredictable branches sit inside tight loops. Threads exchange work. Language bindings move data between Python and Rust.
 
-Its pretokenizers replace general regex execution with specialised state machines. Lookup tables classify bytes directly. SWAR and architecture-specific SIMD inspect several bytes per instruction. Common byte-pair results are cached so repeated words can skip most of the merge work. The implementation also works hard to keep branches predictable, memory local and workers independent.[^implementation]
+Its pretokenizers replace general regex execution with specialised state machines. Lookup tables classify bytes directly. SWAR and architecture-specific SIMD inspect several bytes per instruction. Common byte-pair results are cached so repeated words can skip most of the merge work. Predictable branches, local memory access and independent workers reduce CPU stalls and coordination overhead.[^implementation]
 
-There is a second source of speed in the headline benchmark. The native API reads a large file directly and finds safe boundaries where it can divide the stream between cores. This removes Python data conversion and gives the scheduler an enormous, regular slab of work. On a 144-core AMD EPYC machine, Gigatoken reports 24.53 GB/s for GPT-2 against 24.8 MB/s for Hugging Face, or 989x. On an Apple M4 Max it reports 8.79 GB/s against 6.9 MB/s, or 1,268x.[^benchmark]
+The benchmark also benefits from Gigatoken's native file API. It reads a large file directly and finds safe boundaries where it can divide the stream between cores. This removes Python data conversion and gives the scheduler an enormous, regular slab of work. On a 144-core AMD EPYC machine, Gigatoken reports 24.53 GB/s for GPT-2 against 24.8 MB/s for Hugging Face, or 989x. On an Apple M4 Max it reports 8.79 GB/s against 6.9 MB/s, or 1,268x.[^benchmark]
 
-Those figures show what the implementation can do when the workload is shaped around its fastest API. Gigatoken's own documentation says its compatibility mode is slower and does not reach 1,000x. The headline is therefore a best case, rather than a general expectation for replacing an existing tokenizer.
+Both results use the workload best suited to Gigatoken's native API. Gigatoken's own documentation says its compatibility mode is slower and does not reach 1,000x. The headline is therefore a best case, rather than a general expectation for replacing an existing tokenizer.
 
 ## What happened in my workload
 
@@ -44,7 +44,7 @@ My service cannot hand Gigatoken an 11.9 GB file and disappear. It receives boun
 
 Small requests expose fixed costs. Segmentation limits how freely work can be divided. At the HTTP boundary, faster tokenization leaves a larger fraction of time in everything surrounding it. This is [Amdahl's law](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#strong-scaling-and-amdahl-s-law): speeding up one part of a system has diminishing effect once the unchanged work dominates the total time.
 
-The 1,000x headline did not survive this workload. The million-token segmented case was **37.6x faster**, cutting core processing time from about 159ms to 4ms while preserving every token ID. That is an impressive engineering result and a useful production result. Gigatoken does not need the broad 1,000x claim to be worth taking seriously.
+The 1,000x headline did not survive this workload. The million-token segmented case was **37.6x faster**, cutting core processing time from about 159ms to 4ms while preserving every token ID. The claim did not transfer to production, but the speedup did.
 
 [^implementation]: Marcel Rød's [optimization notes](https://github.com/marcelroed/gigatoken/blob/main/pretokenizer_optimization_log.md) walk through lookup-table dispatch, SWAR scanning, branch removal and dual-cursor instruction-level parallelism. The project README also describes caching and reduced communication between workers.
 [^benchmark]: The [Gigatoken benchmark table](https://github.com/marcelroed/gigatoken#benchmarks) reports results by tokenizer and CPU. Its Hugging Face comparison uses a pre-split 100 MB subset, while Gigatoken processes the complete 11.9 GB file and discovers boundaries itself.
