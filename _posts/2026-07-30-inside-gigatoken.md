@@ -7,7 +7,7 @@ tags: [ai, performance, tokenization, systems]
 image: /assets/images/gigatoken-engine-teardown-cover-clean.webp
 ---
 
-The AI industry pours engineering effort into GPU kernels and treats CPU preprocessing as plumbing. Gigatoken shows how much performance that neglect can leave on the table.
+The AI industry pours engineering effort into GPU kernels and treats CPU preprocessing as an afterthought. Gigatoken shows how much performance that neglect can leave on the table.
 
 In my [first Gigatoken post](/gigatoken-thousand-times-faster/), I tested its 1,000x claim against my tokenizer workload. I did not reproduce 1,000x, but the tokenizer core ran **30x to 40x** faster, including **37.6x** on a million-token request split into 1,024 segments. I wanted to understand where that gain came from.
 
