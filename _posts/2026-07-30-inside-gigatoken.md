@@ -7,11 +7,11 @@ tags: [ai, performance, tokenization, systems]
 image: /assets/images/gigatoken-engine-teardown-cover-clean.webp
 ---
 
-In my [first Gigatoken post](/gigatoken-thousand-times-faster/), I tested its 1,000x claim against my tokenizer workload. The result was **30x to 40x** in the tokenizer core, including **37.6x** on a million-token request split into 1,024 segments.
-
 The AI industry pours engineering effort into GPU kernels and treats CPU preprocessing as plumbing. Gigatoken shows how much performance that neglect can leave on the table.
 
-To understand the core gain, I followed the path Gigatoken optimises most aggressively: tokenizers that apply BPE (byte pair encoding) to UTF-8 bytes, including GPT-2 and the tiktoken family. This is the path behind its headline throughput and the one exercised by my benchmark. The project has no technical paper yet, so what follows is my interpretation of Marcel Rød's source comments, optimisation diary, profiling reports and commit history.[^source] Gigatoken describes SentencePiece as less optimised and does not support WordPiece.[^scope]
+In my [first Gigatoken post](/gigatoken-thousand-times-faster/), I tested its 1,000x claim against my tokenizer workload. I did not reproduce 1,000x, but the tokenizer core ran **30x to 40x** faster, including **37.6x** on a million-token request split into 1,024 segments. I wanted to understand where that gain came from.
+
+I followed the path Gigatoken optimises most aggressively: tokenizers that apply BPE (byte pair encoding) to UTF-8 bytes, including GPT-2 and the tiktoken family. This is the path behind its headline throughput and the one exercised by my benchmark. The project has no technical paper yet, so what follows is my interpretation of Marcel Rød's source comments, optimisation diary, profiling reports and commit history.[^source] Gigatoken describes SentencePiece as less optimised and does not support WordPiece.[^scope]
 
 ## How BPE turns bytes into tokens
 
