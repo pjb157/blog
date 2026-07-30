@@ -2,7 +2,7 @@
 layout: post
 title: "Gigatoken: A Thousand Times Faster?"
 date: 2026-07-24
-description: "Gigatoken claims a 1,000x tokenizer speedup. My production-shaped tests delivered 30x to 42x gains in the tokenizer core."
+description: "Gigatoken claims a 1,000x tokenizer speedup. My production-shaped tests delivered 30x to 40x gains in the tokenizer core."
 tags: [ai, performance, tokenization]
 image: /assets/images/gigatoken-cover.webp
 ---
@@ -11,7 +11,7 @@ image: /assets/images/gigatoken-cover.webp
 
 Gigatoken's figure measures its fastest path over an 11.9 GB OpenWebText file. My use case is an online tokenizer: mixed text, requests ranging up to a one-million-token context window, sometimes split into 1,024 segments, with an HTTP boundary around the work.
 
-I measured between **30x and 42x** in the tokenizer core. That is a large improvement, but the gap from 1,000x is too wide to dismiss as benchmark noise.
+I measured between **30x and 40x** in the tokenizer core. That is a large improvement, but the gap from 1,000x is too wide to dismiss as benchmark noise.
 
 ## Where the thousand comes from
 

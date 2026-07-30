@@ -43,6 +43,8 @@ a:hover {
 
 .container {
   flex: 1;
+  width: 100%;
+  min-width: 0;
   max-width: 1080px;
   margin: 0 auto;
   padding: 2.5rem;
