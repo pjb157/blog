@@ -31,12 +31,12 @@ BPE turns those seven regex spans into fifteen GPT-2 model tokens. The distincti
 <svg id="bpe-pipeline" viewBox="0 0 900 450" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="bpe-pipeline-title bpe-pipeline-desc">
 <title id="bpe-pipeline-title">One GPT-2 pretoken becomes four model tokens</title>
 <desc id="bpe-pipeline-desc">A 64-byte sentence splits into seven GPT-2 pretokens. The microarchitectures pretoken is then shown passing through BPE and becoming four model tokens.</desc>
-<defs><marker id="arrow-pipeline" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-pipeline" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 L4,6 Z" fill="#b87a18"/></marker></defs>
 <rect x="25" y="18" width="850" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="44" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">One 64-byte GPT-2 input block</text>
 <text x="450" y="70" text-anchor="middle" fill="#2c2825" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
 <text x="450" y="88" text-anchor="middle" fill="#8a7f70" font-size="11">· = space byte</text>
-<path d="M450 96 V119" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
+<path d="M450 96 V119" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="15 1000" marker-end="url(#arrow-pipeline)"/>
 <text x="28" y="138" fill="#2c2825" font-size="14" font-weight="650">GPT-2 regex: 7 pretokens</text>
 <rect x="28" y="150" width="116" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <rect x="148" y="150" width="116" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
@@ -52,7 +52,7 @@ BPE turns those seven regex spans into fifteen GPT-2 model tokens. The distincti
 <text x="546" y="179" text-anchor="middle" fill="#2c2825" font-size="10.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·CPU</text>
 <text x="705" y="179" text-anchor="middle" fill="#2c2825" font-size="11.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
 <text x="853" y="179" text-anchor="middle" fill="#2c2825" font-size="12" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">.</text>
-<path d="M705 198 V226 H450 V250" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
+<path d="M705 198 V226 H450 V250" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="299 1000" marker-end="url(#arrow-pipeline)"/>
 <text x="624" y="220" text-anchor="middle" fill="#8a7f70" font-size="11.5">focus one pretoken</text>
 <rect x="70" y="255" width="760" height="165" rx="8" fill="#fffaf1" stroke="#2c2825" stroke-width="2"/>
 <text x="450" y="282" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">BPE inside one pretoken</text>
@@ -99,28 +99,28 @@ The author's detailed optimisation notes and isolated scanner measurements use G
 <svg id="gigatoken-mask-scanner" viewBox="0 0 900 690" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-mask-title gigatoken-mask-desc">
 <title id="gigatoken-mask-title">The common 64-byte mask-scanner path</title>
 <desc id="gigatoken-mask-desc">A 64-byte ASCII sentence passes through SIMD classification and tokeniser-specific boundary rules. Seven start offsets partition the block into proportional pretoken spans.</desc>
-<defs><marker id="arrow-mask" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-mask" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 L4,6 Z" fill="#b87a18"/></marker></defs>
 <rect x="75" y="18" width="750" height="90" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="45" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">One complete 64-byte ASCII block</text>
 <text x="450" y="73" text-anchor="middle" fill="#2c2825" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
 <text x="450" y="96" text-anchor="middle" fill="#8a7f70" font-size="11.5">byte positions 0 to 63 · · = space byte</text>
-<path d="M450 108 V133" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<path d="M450 108 V133" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="17 1000" marker-end="url(#arrow-mask)"/>
 <rect x="150" y="138" width="600" height="70" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="166" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">SIMD byte comparisons</text>
 <text x="450" y="190" text-anchor="middle" fill="#8a7f70" font-size="13">classify many positions as letters, spaces and other byte classes</text>
-<path d="M450 208 V233" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<path d="M450 208 V233" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="17 1000" marker-end="url(#arrow-mask)"/>
 <rect x="150" y="238" width="600" height="70" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="266" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">64-bit class masks</text>
 <text x="450" y="290" text-anchor="middle" fill="#8a7f70" font-size="13">one mask per class · bit i describes byte i</text>
-<path d="M450 308 V333" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<path d="M450 308 V333" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="17 1000" marker-end="url(#arrow-mask)"/>
 <rect x="150" y="338" width="600" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="367" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Tokeniser-specific boundary rules in Rust</text>
 <text x="450" y="392" text-anchor="middle" fill="#8a7f70" font-size="13">shift masks to align neighbours · combine them with AND, OR and NOT</text>
-<path d="M450 416 V441" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<path d="M450 416 V441" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="17 1000" marker-end="url(#arrow-mask)"/>
 <rect x="175" y="446" width="550" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="474" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Pretoken-start mask</text>
 <text x="450" y="501" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">start offsets: 0 · 10 · 20 · 36 · 40 · 44 · 63</text>
-<path d="M450 524 V549" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<path d="M450 524 V549" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="17 1000" marker-end="url(#arrow-mask)"/>
 <text x="50" y="568" fill="#2c2825" font-size="14" font-weight="650">Seven ordered pretokens, scaled by byte length</text>
 <rect x="50" y="580" width="125" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <rect x="175" y="580" width="125" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
@@ -159,20 +159,20 @@ Any region the masks cannot settle falls back to Gigatoken's *scalar walker*. Th
 <svg id="gigatoken-unicode-path" viewBox="0 0 900 745" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-unicode-title gigatoken-unicode-desc">
 <title id="gigatoken-unicode-title">How Unicode rejoins the mask path</title>
 <desc id="gigatoken-unicode-desc">SIMD creates ASCII class masks and a mask of non-ASCII byte positions. If that second mask is non-empty, Gigatoken decodes UTF-8 code points, looks up their classes and stamps each class across the character's bytes. Updated masks feed the tokeniser's boundary rules. An ordered walker reads proven start bits and uses exact scalar advance only through uncertain gaps.</desc>
-<defs><marker id="arrow-unicode" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-unicode" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 L4,6 Z" fill="#b87a18"/></marker></defs>
 <rect x="215" y="18" width="470" height="70" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="46" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">SIMD byte classification</text>
 <text x="450" y="70" text-anchor="middle" fill="#8a7f70" font-size="13">ASCII class masks + non-ASCII-byte mask</text>
-<path d="M450 88 V114" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M450 88 V114" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="18 1000" marker-end="url(#arrow-unicode)"/>
 <polygon points="450,118 575,163 450,208 325,163" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="157" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">Any byte at or</text>
 <text x="450" y="178" text-anchor="middle" fill="#2c2825" font-size="14">above 0x80?</text>
-<path d="M325 163 H170 V252" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M325 163 H170 V252" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="236 1000" marker-end="url(#arrow-unicode)"/>
 <text x="239" y="150" text-anchor="middle" fill="#8a7f70" font-size="12">no</text>
 <rect x="35" y="256" width="270" height="70" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="170" y="284" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">Use the ASCII class masks</text>
 <text x="170" y="308" text-anchor="middle" fill="#8a7f70" font-size="12.5">nothing else to classify</text>
-<path d="M575 163 H720 V222" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M575 163 H720 V222" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="196 1000" marker-end="url(#arrow-unicode)"/>
 <text x="646" y="150" text-anchor="middle" fill="#8a7f70" font-size="12">yes</text>
 <rect x="550" y="226" width="340" height="142" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="720" y="254" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">Extend the masks for Unicode</text>
@@ -180,19 +180,19 @@ Any region the masks cannot settle falls back to Gigatoken's *scalar walker*. Th
 <text x="720" y="307" text-anchor="middle" fill="#8a7f70" font-size="12.5">2. look up each character's packed class</text>
 <text x="720" y="333" text-anchor="middle" fill="#8a7f70" font-size="12.5">3. stamp that class across its UTF-8 bytes</text>
 <text x="720" y="354" text-anchor="middle" fill="#b87a18" font-size="12">letter · number · whitespace · other</text>
-<path d="M170 326 V399 H330" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
-<path d="M720 368 V399 H570" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M170 326 V399 H330" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="225 1000" marker-end="url(#arrow-unicode)"/>
+<path d="M720 368 V399 H570" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="173 1000" marker-end="url(#arrow-unicode)"/>
 <rect x="330" y="374" width="240" height="58" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="409" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">Updated class masks</text>
-<path d="M450 432 V459" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M450 432 V459" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="19 1000" marker-end="url(#arrow-unicode)"/>
 <rect x="275" y="463" width="350" height="66" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="490" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">Tokeniser-specific boundary rules</text>
 <text x="450" y="513" text-anchor="middle" fill="#8a7f70" font-size="12.5">operate over all 64 byte positions</text>
-<path d="M450 529 V556" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M450 529 V556" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="19 1000" marker-end="url(#arrow-unicode)"/>
 <rect x="250" y="560" width="400" height="66" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="587" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">Batch result</text>
 <text x="450" y="610" text-anchor="middle" fill="#8a7f70" font-size="12.5">proven start bits + bad-zone bits</text>
-<path d="M450 626 V653" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-unicode)"/>
+<path d="M450 626 V653" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="19 1000" marker-end="url(#arrow-unicode)"/>
 <rect x="90" y="657" width="720" height="70" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="684" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">One ordered boundary walker</text>
 <text x="450" y="708" text-anchor="middle" fill="#8a7f70" font-size="12.5">read proven start bits · scalar-advance exactly through any uncertain gap · emit pretoken spans</text>
@@ -230,7 +230,7 @@ The common inline emit path also spends a few extra stores to remove control flo
 <svg id="gigatoken-cache-line" viewBox="0 0 900 420" width="100%" style="height:auto;min-width:740px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-cache-title gigatoken-cache-desc">
 <title id="gigatoken-cache-title">Gigatoken's pretoken cache layout and prefetch ladder</title>
 <desc id="gigatoken-cache-desc">Two 32-byte entries form one 64-byte probe bucket. A 256-span pipeline first requests the future target line in L2, then requests it in L1 sixteen probes before it is consumed.</desc>
-<defs><marker id="arrow-cache" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-cache" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 L4,6 Z" fill="#b87a18"/></marker></defs>
 <text x="25" y="34" fill="#2c2825" font-size="16" font-weight="650">One 64-byte probe bucket</text>
 <rect x="25" y="50" width="850" height="112" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <rect x="25" y="50" width="425" height="112" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
@@ -252,12 +252,12 @@ The common inline emit path also spends a few extra stores to remove control flo
 <text x="145" y="266" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">Discover span</text>
 <text x="145" y="290" text-anchor="middle" fill="#8a7f70" font-size="13">pack key + hash</text>
 <text x="145" y="311" text-anchor="middle" fill="#b87a18" font-size="13">request target line in L2</text>
-<path d="M265 281 H345" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-cache)"/>
+<path d="M265 281 H345" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="72 1000" marker-end="url(#arrow-cache)"/>
 <rect x="350" y="235" width="230" height="92" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="465" y="266" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">16 probes ahead</text>
 <text x="465" y="290" text-anchor="middle" fill="#8a7f70" font-size="13">request line in L1</text>
 <text x="465" y="311" text-anchor="middle" fill="#b87a18" font-size="13">prefetch hint</text>
-<path d="M580 281 H660" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-cache)"/>
+<path d="M580 281 H660" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="72 1000" marker-end="url(#arrow-cache)"/>
 <rect x="665" y="235" width="210" height="92" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="770" y="266" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">Probe + emit</text>
 <text x="770" y="290" text-anchor="middle" fill="#8a7f70" font-size="13">compare both keys</text>
@@ -308,7 +308,7 @@ Gigatoken reserves flat output space and uses a commit cursor to copy the ready 
 <svg id="gigatoken-parallel" viewBox="0 0 900 500" width="100%" style="height:auto;min-width:740px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-parallel-title gigatoken-parallel-desc">
 <title id="gigatoken-parallel-title">Gigatoken's coarse parallel scheduling and output assembly</title>
 <desc id="gigatoken-parallel-desc">A large input is cut at pretoken-safe boundaries into large early chunks and smaller tail chunks. Worker tasks pull chunks through an atomic index, use exclusive mutable state, then copy ready chunks into a flat output buffer in input order.</desc>
-<defs><marker id="arrow-parallel" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-parallel" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 L4,6 Z" fill="#b87a18"/></marker></defs>
 <text x="25" y="31" fill="#2c2825" font-size="15" font-weight="650">One large input, cut only at safe boundaries</text>
 <rect x="25" y="48" width="190" height="54" rx="7" fill="#b87a18"/>
 <rect x="218" y="48" width="190" height="54" rx="7" fill="#b87a18"/>
@@ -318,16 +318,16 @@ Gigatoken reserves flat output space and uses a commit cursor to copy the ready 
 <rect x="783" y="48" width="78" height="54" rx="7" fill="#bf9a5a"/>
 <text x="313" y="81" text-anchor="middle" fill="#fffaf1" font-size="13">large head chunks</text>
 <text x="733" y="81" text-anchor="middle" fill="#fffaf1" font-size="12">small tail</text>
-<path d="M450 102 V142" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
+<path d="M450 102 V142" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="32 1000" marker-end="url(#arrow-parallel)"/>
 <rect x="275" y="147" width="350" height="52" rx="9" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="178" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">large head chunks first, then the small tail</text>
-<path d="M450 199 V220" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
+<path d="M450 199 V220" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="13 1000" marker-end="url(#arrow-parallel)"/>
 <rect x="300" y="225" width="300" height="55" rx="9" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="248" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">shared model + atomic chunk index</text>
 <text x="450" y="268" text-anchor="middle" fill="#8a7f70" font-size="12">tasks pull one chunk at a time</text>
-<path d="M370 280 L170 321" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
-<path d="M450 280 V321" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
-<path d="M530 280 L730 321" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
+<path d="M370 280 L170 321" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="196.159 1000" marker-end="url(#arrow-parallel)"/>
+<path d="M450 280 V321" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="33 1000" marker-end="url(#arrow-parallel)"/>
+<path d="M530 280 L730 321" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="196.159 1000" marker-end="url(#arrow-parallel)"/>
 <rect x="55" y="326" width="230" height="92" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <rect x="335" y="326" width="230" height="92" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <rect x="615" y="326" width="230" height="92" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
@@ -340,9 +340,9 @@ Gigatoken reserves flat output space and uses a commit cursor to copy the ready 
 <text x="730" y="353" text-anchor="middle" fill="#2c2825" font-size="14" font-weight="650">Worker task N</text>
 <text x="730" y="377" text-anchor="middle" fill="#8a7f70" font-size="12">exclusive cache + scratch</text>
 <text x="730" y="399" text-anchor="middle" fill="#b87a18" font-size="12">chunk token buffer</text>
-<path d="M170 418 V451 H390" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
-<path d="M450 418 V451" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
-<path d="M730 418 V451 H510" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-parallel)"/>
+<path d="M170 418 V438 H380 L390 448" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="236.142 1000" marker-end="url(#arrow-parallel)"/>
+<path d="M450 418 V448" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="22 1000" marker-end="url(#arrow-parallel)"/>
+<path d="M730 418 V438 H520 L510 448" fill="none" stroke="#b87a18" stroke-width="2.5" stroke-dasharray="236.142 1000" marker-end="url(#arrow-parallel)"/>
 <rect x="285" y="451" width="330" height="42" rx="9" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="477" text-anchor="middle" fill="#2c2825" font-size="13.5" font-weight="650">commit cursor copies chunks in input order</text>
 </svg>
