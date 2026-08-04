@@ -17,43 +17,67 @@ I followed the path Gigatoken optimises most aggressively: tokenisers that apply
 
 The tokenisers in this article turn UTF-8 text into a sequence of integers. Their vocabularies map byte sequences to token IDs. A token might represent a whole word, part of a word, punctuation or a single byte.
 
-Encoding runs as a pipeline. *Pretokenisation* is the coarse split immediately before BPE: it divides the continuous byte stream into spans using model-specific rules, commonly expressed as a regular expression. Each intermediate span is a *pretoken*, which BPE consumes to produce the final model tokens. For a GPT-2-style tokeniser:
+Encoding runs as a pipeline. *Pretokenisation* is the coarse split immediately before BPE: it divides the continuous byte stream into spans using model-specific rules, commonly expressed as a regular expression. Each intermediate span is a *pretoken*, which BPE consumes to produce the final model tokens. For GPT-2's r50k tokeniser:
 
 ```text
-" token 42!"  →  [" token", " 42", "!"]
+" Gigatoken optimises pretokenisation for CPU microarchitectures."
+→ [" Gigatoken", " optimises", " pretokenisation", " for", " CPU", " microarchitectures", "."]
 ```
+{: .gigatoken-pretoken-example}
+
+BPE turns those seven regex spans into fifteen GPT-2 model tokens. The distinction matters because one pretoken can produce several model tokens.
 
 <figure style="width:100%;max-width:calc(100vw - 3rem);margin:2.5rem 0;overflow-x:auto;">
-<svg id="bpe-pipeline" viewBox="0 0 860 260" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="bpe-pipeline-title bpe-pipeline-desc">
-<title id="bpe-pipeline-title">How BPE turns bytes into token IDs</title>
-<desc id="bpe-pipeline-desc">UTF-8 bytes are split into independent pretokens. Each pretoken passes through repeated byte-pair merges before the remaining vocabulary entries become token IDs.</desc>
+<svg id="bpe-pipeline" viewBox="0 0 900 450" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="bpe-pipeline-title bpe-pipeline-desc">
+<title id="bpe-pipeline-title">One GPT-2 pretoken becomes four model tokens</title>
+<desc id="bpe-pipeline-desc">A 64-byte sentence splits into seven GPT-2 pretokens. The microarchitectures pretoken is then shown passing through BPE and becoming four model tokens.</desc>
 <defs><marker id="arrow-pipeline" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
-<rect x="20" y="42" width="150" height="76" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
-<text x="95" y="72" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">UTF-8 bytes</text>
-<text x="95" y="96" text-anchor="middle" fill="#8a7f70" font-size="13">input text</text>
-<path d="M170 80 H220" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
-<rect x="225" y="42" width="170" height="76" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
-<text x="310" y="72" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Pretokenise</text>
-<text x="310" y="96" text-anchor="middle" fill="#8a7f70" font-size="13">find model-defined spans</text>
-<path d="M395 80 H445" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
-<rect x="450" y="25" width="180" height="110" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
-<text x="540" y="54" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">BPE within each span</text>
-<text x="540" y="82" text-anchor="middle" fill="#8a7f70" font-size="13">[l] [o] [w] [e] [r]</text>
-<text x="540" y="108" text-anchor="middle" fill="#b87a18" font-size="13">[lo] [w] [e] [r]</text>
-<path d="M630 80 H680" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
-<rect x="685" y="42" width="155" height="76" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
-<text x="762" y="72" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Token IDs</text>
-<text x="762" y="96" text-anchor="middle" fill="#8a7f70" font-size="13">vocabulary entries</text>
-<rect x="225" y="174" width="405" height="54" rx="9" fill="#fffaf1" stroke="#bf9a5a" stroke-width="2" stroke-dasharray="6 5"/>
-<text x="427" y="198" text-anchor="middle" fill="#2c2825" font-size="14">Across pretokens: independent</text>
-<text x="427" y="217" text-anchor="middle" fill="#8a7f70" font-size="12">Within one: each merge changes the next choice</text>
+<rect x="25" y="18" width="850" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="450" y="44" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">One 64-byte GPT-2 input block</text>
+<text x="450" y="70" text-anchor="middle" fill="#2c2825" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
+<text x="450" y="88" text-anchor="middle" fill="#8a7f70" font-size="11">· = space byte</text>
+<path d="M450 96 V119" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
+<text x="28" y="138" fill="#2c2825" font-size="14" font-weight="650">GPT-2 regex: 7 pretokens</text>
+<rect x="28" y="150" width="116" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="148" y="150" width="116" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="268" y="150" width="180" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="452" y="150" width="60" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="516" y="150" width="60" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="580" y="150" width="250" height="48" rx="6" fill="#fffaf1" stroke="#2c2825" stroke-width="2.5"/>
+<rect x="834" y="150" width="38" height="48" rx="6" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="86" y="179" text-anchor="middle" fill="#2c2825" font-size="11.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken</text>
+<text x="206" y="179" text-anchor="middle" fill="#2c2825" font-size="11.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·optimises</text>
+<text x="358" y="179" text-anchor="middle" fill="#2c2825" font-size="11.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·pretokenisation</text>
+<text x="482" y="179" text-anchor="middle" fill="#2c2825" font-size="10.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·for</text>
+<text x="546" y="179" text-anchor="middle" fill="#2c2825" font-size="10.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·CPU</text>
+<text x="705" y="179" text-anchor="middle" fill="#2c2825" font-size="11.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="853" y="179" text-anchor="middle" fill="#2c2825" font-size="12" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">.</text>
+<path d="M705 198 V226 H450 V250" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-pipeline)"/>
+<text x="624" y="220" text-anchor="middle" fill="#8a7f70" font-size="11.5">focus one pretoken</text>
+<rect x="70" y="255" width="760" height="165" rx="8" fill="#fffaf1" stroke="#2c2825" stroke-width="2"/>
+<text x="450" y="282" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">BPE inside one pretoken</text>
+<text x="450" y="307" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="450" y="332" text-anchor="middle" fill="#8a7f70" font-size="12.5">late merge: [it] + [ect] → [itect]</text>
+<rect x="115" y="347" width="150" height="52" rx="6" fill="#f1e7d3" stroke="#b9ab95" stroke-width="1.5"/>
+<rect x="285" y="347" width="130" height="52" rx="6" fill="#f1e7d3" stroke="#b9ab95" stroke-width="1.5"/>
+<rect x="435" y="347" width="150" height="52" rx="6" fill="#f1e7d3" stroke="#b9ab95" stroke-width="1.5"/>
+<rect x="605" y="347" width="150" height="52" rx="6" fill="#f1e7d3" stroke="#b9ab95" stroke-width="1.5"/>
+<text x="190" y="369" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[·micro]</text>
+<text x="350" y="369" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[arch]</text>
+<text x="510" y="369" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[itect]</text>
+<text x="680" y="369" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">[ures]</text>
+<text x="190" y="390" text-anchor="middle" fill="#8a7f70" font-size="11">ID 4580</text>
+<text x="350" y="390" text-anchor="middle" fill="#8a7f70" font-size="11">ID 998</text>
+<text x="510" y="390" text-anchor="middle" fill="#8a7f70" font-size="11">ID 5712</text>
+<text x="680" y="390" text-anchor="middle" fill="#8a7f70" font-size="11">ID 942</text>
+<text x="450" y="443" text-anchor="middle" fill="#2c2825" font-size="13.5" font-weight="650">1 pretoken → 4 model tokens · 7 pretokens → 15 model tokens overall</text>
 </svg>
-<figcaption style="margin-top:0.75rem;color:#8a7f70;font-size:0.85rem;line-height:1.5;">Pretokenisation divides the byte stream into model-defined spans. BPE may merge only within a span, so different spans can be processed independently. Within one span, each merge changes the candidates for the next merge.</figcaption>
+<figcaption style="margin-top:0.75rem;color:#8a7f70;font-size:0.85rem;line-height:1.5;">The 64-byte example splits into seven GPT-2 pretokens, then BPE turns them into fifteen model tokens. The selected pretoken alone produces four: IDs 4580, 998, 5712 and 942.</figcaption>
 </figure>
 
 The hard boundaries also explain why the spans are independent. BPE is forbidden to merge across them, so a merge inside one pretoken cannot create or remove a candidate pair in another. The encoder can process each pretoken separately, then concatenate their token IDs in the original order.
 
-Inside one pretoken, BPE starts from bytes or initial symbols. Its merge table was learned when the tokeniser was trained and is fixed during encoding. Each legal adjacent pair has a numeric rank, and the lower rank wins. If `lo` is the best-ranked adjacent pair, the symbol sequence changes from `[l] [o] [w] [e] [r]` to `[lo] [w] [e] [r]`. The encoder looks up the affected neighbouring pairs again, chooses the next best merge and repeats until no legal merge remains. The surviving symbols map to token IDs.[^bpe]
+Inside one pretoken, BPE starts from bytes or initial symbols. Its merge table was learned when the tokeniser was trained and is fixed during encoding. Each legal adjacent pair has a numeric rank, and the lower rank wins. For the ` microarchitectures` pretoken, one of the later steps merges `[it] [ect]` into `[itect]`; the final GPT-2 pieces are `[ micro] [arch] [itect] [ures]`. The encoder looks up the affected neighbouring pairs again after every merge, chooses the next best candidate and repeats until no legal merge remains. The surviving symbols map to token IDs.[^bpe]
 
 ## What Gigatoken changes inside the Rust core
 
@@ -69,38 +93,52 @@ The first classification pass handles ASCII, where one byte represents one chara
 
 Gigatoken's loader recognises a fixed set of tokeniser patterns and selects dedicated Rust code for each one. For each mask-scanner family, the implementation expresses the regex's boundary rules as operations over the class masks. The code treats each mask as a row of 64 on/off positions. A shift slides one row left or right so each byte lines up with its neighbour. AND keeps positions where two conditions are true, OR combines alternatives, and NOT selects positions outside a class. SIMD has finished once it creates the masks; ordinary 64-bit integer operations then combine them into boundary bits.
 
-The author's detailed optimisation notes and isolated scanner measurements use GPT-2's r50k pretokeniser, so I use the same worked example here.[^scanner] Under r50k's rules, a leading space can join the letter, number or punctuation run after it. In `·go·42!`, where `·` is a space byte, shifting the letter and digit masks supplies the previous-position relationship for every byte at once. The resulting start bits identify `·go`, `·42` and `!`.
+The author's detailed optimisation notes and isolated scanner measurements use GPT-2's r50k pretokeniser, so I use the same worked example here.[^scanner] Its 64 ASCII bytes fill one complete scanner block. Under r50k's rules, a leading space can join the letter, number or punctuation run after it. Shifting the class masks supplies the previous-position relationship for every byte at once. The boundary rules mark starts at byte offsets `0`, `10`, `20`, `36`, `40`, `44` and `63`, producing `·Gigatoken`, `·optimises`, `·pretokenisation`, `·for`, `·CPU`, `·microarchitectures` and `.`; here `·` represents a space byte.
 
 <figure style="width:100%;max-width:calc(100vw - 3rem);margin:2.5rem 0;overflow-x:auto;">
-<svg id="gigatoken-mask-scanner" viewBox="0 0 900 620" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-mask-title gigatoken-mask-desc">
+<svg id="gigatoken-mask-scanner" viewBox="0 0 900 690" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-mask-title gigatoken-mask-desc">
 <title id="gigatoken-mask-title">The common 64-byte mask-scanner path</title>
-<desc id="gigatoken-mask-desc">A clean ASCII block passes through SIMD byte comparisons, 64-bit class masks and tokeniser-specific boundary rules. The resulting start-bit mask identifies the pretokens in input order.</desc>
+<desc id="gigatoken-mask-desc">A 64-byte ASCII sentence passes through SIMD classification and tokeniser-specific boundary rules. Seven start offsets partition the block into proportional pretoken spans.</desc>
 <defs><marker id="arrow-mask" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
-<rect x="150" y="18" width="600" height="66" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
-<text x="450" y="45" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">64-byte block</text>
-<text x="450" y="68" text-anchor="middle" fill="#8a7f70" font-size="13">common ASCII path</text>
-<path d="M450 84 V111" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
-<rect x="150" y="115" width="600" height="72" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
-<text x="450" y="144" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">SIMD byte comparisons</text>
-<text x="450" y="168" text-anchor="middle" fill="#8a7f70" font-size="13">compare many positions as letters, digits, spaces and other classes</text>
-<path d="M450 187 V214" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
-<rect x="150" y="218" width="600" height="72" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
-<text x="450" y="247" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">64-bit class masks</text>
-<text x="450" y="271" text-anchor="middle" fill="#8a7f70" font-size="13">one mask per class · bit i describes byte i</text>
-<path d="M450 290 V317" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
-<rect x="150" y="321" width="600" height="78" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
-<text x="450" y="350" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Tokeniser-specific boundary rules in Rust</text>
-<text x="450" y="375" text-anchor="middle" fill="#8a7f70" font-size="13">shift masks to align neighbours · combine conditions with AND, OR and NOT</text>
-<path d="M450 399 V426" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
-<rect x="110" y="430" width="680" height="100" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
-<text x="450" y="457" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Pretoken-start mask</text>
-<text x="450" y="485" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">bytes    ·   g   o   ·   4   2   !</text>
-<text x="450" y="510" text-anchor="middle" fill="#b87a18" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">starts   1   0   0   1   0   0   1</text>
-<path d="M450 530 V557" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
-<rect x="210" y="561" width="480" height="48" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
-<text x="450" y="591" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">Ordered pretokens: [·go] [·42] [!]</text>
+<rect x="75" y="18" width="750" height="90" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="450" y="45" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">One complete 64-byte ASCII block</text>
+<text x="450" y="73" text-anchor="middle" fill="#2c2825" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
+<text x="450" y="96" text-anchor="middle" fill="#8a7f70" font-size="11.5">byte positions 0 to 63 · · = space byte</text>
+<path d="M450 108 V133" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<rect x="150" y="138" width="600" height="70" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="450" y="166" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">SIMD byte comparisons</text>
+<text x="450" y="190" text-anchor="middle" fill="#8a7f70" font-size="13">classify many positions as letters, spaces and other byte classes</text>
+<path d="M450 208 V233" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<rect x="150" y="238" width="600" height="70" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="450" y="266" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">64-bit class masks</text>
+<text x="450" y="290" text-anchor="middle" fill="#8a7f70" font-size="13">one mask per class · bit i describes byte i</text>
+<path d="M450 308 V333" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<rect x="150" y="338" width="600" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="450" y="367" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Tokeniser-specific boundary rules in Rust</text>
+<text x="450" y="392" text-anchor="middle" fill="#8a7f70" font-size="13">shift masks to align neighbours · combine them with AND, OR and NOT</text>
+<path d="M450 416 V441" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<rect x="175" y="446" width="550" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="450" y="474" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">Pretoken-start mask</text>
+<text x="450" y="501" text-anchor="middle" fill="#2c2825" font-size="13" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">start offsets: 0 · 10 · 20 · 36 · 40 · 44 · 63</text>
+<path d="M450 524 V549" fill="none" stroke="#b87a18" stroke-width="2.5" marker-end="url(#arrow-mask)"/>
+<text x="50" y="568" fill="#2c2825" font-size="14" font-weight="650">Seven ordered pretokens, scaled by byte length</text>
+<rect x="50" y="580" width="125" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="175" y="580" width="125" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="300" y="580" width="200" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="500" y="580" width="50" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="550" y="580" width="50" height="58" rx="5" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<rect x="600" y="580" width="237.5" height="58" rx="5" fill="#fffaf1" stroke="#2c2825" stroke-width="2"/>
+<rect x="837.5" y="580" width="12.5" height="58" rx="3" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
+<text x="112.5" y="614" text-anchor="middle" fill="#2c2825" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken</text>
+<text x="237.5" y="614" text-anchor="middle" fill="#2c2825" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·optimises</text>
+<text x="400" y="614" text-anchor="middle" fill="#2c2825" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·pretokenisation</text>
+<text x="525" y="614" text-anchor="middle" fill="#2c2825" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·for</text>
+<text x="575" y="614" text-anchor="middle" fill="#2c2825" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·CPU</text>
+<text x="718.75" y="614" text-anchor="middle" fill="#2c2825" font-size="11" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·microarchitectures</text>
+<text x="843.75" y="614" text-anchor="middle" fill="#2c2825" font-size="9" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">.</text>
+<text x="450" y="672" text-anchor="middle" fill="#8a7f70" font-size="12">segment lengths in bytes: 10 · 10 · 16 · 4 · 4 · 19 · 1</text>
 </svg>
-<figcaption style="margin-top:0.75rem;color:#8a7f70;font-size:0.85rem;line-height:1.5;">Here <code>·</code> is the space byte <code>0x20</code>. The scanner works in 64-byte blocks, with carry and lookahead allowing pretokens to continue across block edges.</figcaption>
+<figcaption style="margin-top:0.75rem;color:#8a7f70;font-size:0.85rem;line-height:1.5;">The sentence fills one 64-byte block. Its seven start offsets partition the input into ordered pretokens; <code>·</code> represents the space byte <code>0x20</code>. Carry and lookahead allow other pretokens to continue across block edges.</figcaption>
 </figure>
 
 Bit-parallel regex evaluation and SIMD block classification predate Gigatoken. Its contribution is specialising those techniques for the fixed patterns used by model tokenisers.[^bitparallel]

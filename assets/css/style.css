@@ -300,6 +300,18 @@ a:hover {
   font-size: 0.86em;
 }
 
+.post-content pre.gigatoken-pretoken-example,
+.post-content .gigatoken-pretoken-example pre {
+  overflow-x: hidden;
+}
+
+.post-content pre.gigatoken-pretoken-example code,
+.post-content .gigatoken-pretoken-example pre code {
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* Rouge syntax highlighting — warm light theme (matches the page palette) */
 .post-content .highlight .c,
 .post-content .highlight .c1,
