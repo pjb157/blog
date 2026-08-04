@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The AI Industry Forgot How to Optimise a CPU"
+title: "Inside Gigatoken: Optimisations Beyond 'Rewrite It in Rust'"
 date: 2026-07-30
 description: "A first-principles tour of the SIMD scanners, cache-aware layouts, huge pages and worker scheduling behind Gigatoken."
 tags: [ai, performance, tokenization, systems]
