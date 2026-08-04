@@ -31,7 +31,7 @@ BPE turns those seven regex spans into fifteen GPT-2 model tokens. The distincti
 <svg id="bpe-pipeline" viewBox="0 0 900 450" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="bpe-pipeline-title bpe-pipeline-desc">
 <title id="bpe-pipeline-title">One GPT-2 pretoken becomes four model tokens</title>
 <desc id="bpe-pipeline-desc">A 64-byte sentence splits into seven GPT-2 pretokens. The microarchitectures pretoken is then shown passing through BPE and becoming four model tokens.</desc>
-<defs><marker id="arrow-pipeline" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-pipeline" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b87a18"/></marker></defs>
 <rect x="25" y="18" width="850" height="78" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="44" text-anchor="middle" fill="#2c2825" font-size="15" font-weight="650">One 64-byte GPT-2 input block</text>
 <text x="450" y="70" text-anchor="middle" fill="#2c2825" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
@@ -99,7 +99,7 @@ The author's detailed optimisation notes and isolated scanner measurements use G
 <svg id="gigatoken-mask-scanner" viewBox="0 0 900 690" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-mask-title gigatoken-mask-desc">
 <title id="gigatoken-mask-title">The common 64-byte mask-scanner path</title>
 <desc id="gigatoken-mask-desc">A 64-byte ASCII sentence passes through SIMD classification and tokeniser-specific boundary rules. Seven start offsets partition the block into proportional pretoken spans.</desc>
-<defs><marker id="arrow-mask" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-mask" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b87a18"/></marker></defs>
 <rect x="75" y="18" width="750" height="90" rx="8" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="45" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">One complete 64-byte ASCII block</text>
 <text x="450" y="73" text-anchor="middle" fill="#2c2825" font-size="12.5" font-family="ui-monospace,'SFMono-Regular',Consolas,monospace">·Gigatoken·optimises·pretokenisation·for·CPU·microarchitectures.</text>
@@ -159,7 +159,7 @@ Any region the masks cannot settle falls back to Gigatoken's *scalar walker*. Th
 <svg id="gigatoken-unicode-path" viewBox="0 0 900 745" width="100%" style="height:auto;min-width:700px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-unicode-title gigatoken-unicode-desc">
 <title id="gigatoken-unicode-title">How Unicode rejoins the mask path</title>
 <desc id="gigatoken-unicode-desc">SIMD creates ASCII class masks and a mask of non-ASCII byte positions. If that second mask is non-empty, Gigatoken decodes UTF-8 code points, looks up their classes and stamps each class across the character's bytes. Updated masks feed the tokeniser's boundary rules. An ordered walker reads proven start bits and uses exact scalar advance only through uncertain gaps.</desc>
-<defs><marker id="arrow-unicode" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-unicode" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b87a18"/></marker></defs>
 <rect x="215" y="18" width="470" height="70" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
 <text x="450" y="46" text-anchor="middle" fill="#2c2825" font-size="16" font-weight="650">SIMD byte classification</text>
 <text x="450" y="70" text-anchor="middle" fill="#8a7f70" font-size="13">ASCII class masks + non-ASCII-byte mask</text>
@@ -230,7 +230,7 @@ The common inline emit path also spends a few extra stores to remove control flo
 <svg id="gigatoken-cache-line" viewBox="0 0 900 420" width="100%" style="height:auto;min-width:740px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-cache-title gigatoken-cache-desc">
 <title id="gigatoken-cache-title">Gigatoken's pretoken cache layout and prefetch ladder</title>
 <desc id="gigatoken-cache-desc">Two 32-byte entries form one 64-byte probe bucket. A 256-span pipeline first requests the future target line in L2, then requests it in L1 sixteen probes before it is consumed.</desc>
-<defs><marker id="arrow-cache" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-cache" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b87a18"/></marker></defs>
 <text x="25" y="34" fill="#2c2825" font-size="16" font-weight="650">One 64-byte probe bucket</text>
 <rect x="25" y="50" width="850" height="112" rx="10" fill="#fffaf1" stroke="#b9ab95" stroke-width="2"/>
 <rect x="25" y="50" width="425" height="112" rx="10" fill="#f1e7d3" stroke="#b9ab95" stroke-width="2"/>
@@ -308,7 +308,7 @@ Gigatoken reserves flat output space and uses a commit cursor to copy the ready 
 <svg id="gigatoken-parallel" viewBox="0 0 900 500" width="100%" style="height:auto;min-width:740px;display:block;margin:0 auto;font-family:-apple-system,'Segoe UI',system-ui,sans-serif" role="img" aria-labelledby="gigatoken-parallel-title gigatoken-parallel-desc">
 <title id="gigatoken-parallel-title">Gigatoken's coarse parallel scheduling and output assembly</title>
 <desc id="gigatoken-parallel-desc">A large input is cut at pretoken-safe boundaries into large early chunks and smaller tail chunks. Worker tasks pull chunks through an atomic index, use exclusive mutable state, then copy ready chunks into a flat output buffer in input order.</desc>
-<defs><marker id="arrow-parallel" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b87a18"/></marker></defs>
+<defs><marker id="arrow-parallel" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="6" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b87a18"/></marker></defs>
 <text x="25" y="31" fill="#2c2825" font-size="15" font-weight="650">One large input, cut only at safe boundaries</text>
 <rect x="25" y="48" width="190" height="54" rx="7" fill="#b87a18"/>
 <rect x="218" y="48" width="190" height="54" rx="7" fill="#b87a18"/>
