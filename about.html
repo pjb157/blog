@@ -31,4 +31,15 @@ permalink: /about/
   </div>
   {% endfor %}
 
+  {% if cv.talks.size > 0 %}
+  <h2>Selected Talks</h2>
+
+  {% for talk in cv.talks %}
+  <div class="about-talk">
+    <a class="about-talk-title" href="{{ talk.url | escape }}" target="_blank" rel="noopener">{{ talk.name | escape }}</a>
+    <span class="about-talk-event">{{ talk.event | escape }} · {{ talk.year }}</span>
+  </div>
+  {% endfor %}
+  {% endif %}
+
 </div>

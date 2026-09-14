@@ -613,6 +613,23 @@ a:hover {
   color: var(--muted);
 }
 
+.about-talk {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.about-talk-title {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.about-talk-event {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 .about-skills {
   display: flex;
   flex-direction: column;
