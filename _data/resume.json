@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
   "basics": {
     "name": "Peter Bhabra",
-    "label": "Principal Software Engineer | AI/ML & Distributed Systems",
+    "label": "Software Engineer | AI/ML & Distributed Systems",
     "image": "",
     "email": "peter.bhabra@gmail.com",
     "url": "https://github.com/pjb157",
@@ -26,16 +26,30 @@
     {
       "name": "Doubleword",
       "position": "Member of Technical Staff - 2023 to Present",
-      "summary": "Engineer driving AI inference platform development. Leading architecture decisions, technical direction and personnel for generative AI products.",
-      "highlights": [
-        "Drive technical direction and quarterly planning. Manage sprint processes, delivery timelines, and cross-functional initiatives.",
-        "Developed a production inference engine supporting real-time and batch workloads with custom scheduling and resource management.",
-        "Engineered an AI gateway achieving 450x throughput improvement over existing solutions through connection pooling and request batching.",
-        "Architected a resilient, cost-effective batched inference platform for non-realtime workloads.",
-        "Led client engagements and deployed production LLM APIs and RAG applications across multiple environments.",
-        "Built a Rust-based inference engine using Candle for stable diffusion models, demonstrating low-level ML systems expertise.",
-        "Created the internal DevOps ecosystem spanning release publishing through client deployments.",
-        "Managed Kubernetes infrastructure including self-hosted clusters for CI/CD. Built Helm charts, custom operators, and deployment automation."
+      "summary": "Built self-hosted inference products before moving to lead the core engineering team for Doubleword’s hosted inference platform.",
+      "phases": [
+        {
+          "name": "Hosted inference platform",
+          "period": "Late 2025–Present",
+          "highlights": [
+            "Lead a five-person engineering team responsible for Doubleword’s core hosted inference platform, and have run hiring processes to grow the team.",
+            "Own incident response and on-call coverage for a production inference service operating 24/7.",
+            "Developed low-latency Rust backends for real-time and asynchronous inference, including an API gateway benchmarked at 450× faster than LiteLLM.",
+            "Implemented durable request processing backed by PostgreSQL, covering dispatch, retries, completion, and failure handling.",
+            "Designed and built scheduling systems that connect queued inference requests to available GPU capacity."
+          ]
+        },
+        {
+          "name": "Self-hosted inference",
+          "period": "2023–Late 2025",
+          "highlights": [
+            "Built custom inference engines with scheduling and resource management, and implemented inference research including speculative decoding.",
+            "Delivered full-stack, on-premises deployments of open-source LLMs, production APIs, and RAG applications.",
+            "Led technical client engagements throughout B2B sales cycles and deployment.",
+            "Built a Rust-based inference engine using Candle for Stable Diffusion models.",
+            "Built release and deployment automation, Helm charts, and custom Kubernetes operators, and managed self-hosted CI/CD clusters."
+          ]
+        }
       ]
     },
     {
@@ -70,46 +84,33 @@
       "courses": []
     }
   ],
-  "skills": [
+  "talks": [
     {
-      "name": "Software Engineering & Distributed Systems",
-      "keywords": [
-        "Python",
-        "Rust",
-        "Microservices",
-        "Event-driven",
-        "API Design",
-        "Low-latency Systems",
-        "Concurrency",
-        "Performance Optimization"
-      ]
+      "name": "The Massively Parallel Agent Stack",
+      "event": "Cloud Native & Open Source AI Conference",
+      "year": 2026,
+      "url": "https://www.youtube.com/watch?v=5jc0s0nnhZA"
     },
     {
-      "name": "AI/ML & Inference",
-      "keywords": [
-        "LLM Infrastructure",
-        "Inference Optimization",
-        "RAG",
-        "PyTorch","Candle"
-      ]
+      "name": "Gateways Unlock AI Builders",
+      "event": "Cloud Native AI UG",
+      "year": 2025,
+      "url": "https://www.youtube.com/watch?v=ev8p8eLgqxk"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Peter Bhabra’s technical blog",
+      "publisher": "peterbhabra.com",
+      "url": "https://peterbhabra.com",
+      "summary": "Writing on AI infrastructure, systems engineering, and performance."
     },
     {
-      "name": "DevOps & Infrastructure",
-      "keywords": [
-        "Kubernetes",
-        "Helm",
-        "Docker",
-        "AWS","GCP","Azure",
-        "Serverless",
-        "CI/CD"
-      ]
-    },
-    {
-      "name": "Public Speaking",
-      "keywords": [
-        "Cloud Native London",
-        "Data & AI Community Stack Meetup"
-      ]
+      "name": "Gigatoken: making tokenisation care about the hardware",
+      "publisher": "peterbhabra.com",
+      "releaseDate": "2026-07-30",
+      "url": "https://peterbhabra.com/inside-gigatoken/",
+      "summary": "Deep dive into SIMD scanners, cache-aware layouts, huge pages, and worker scheduling."
     }
   ],
   "meta": {
