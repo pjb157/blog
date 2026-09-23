@@ -13,6 +13,8 @@ section { margin-top: 25px; }
 h2 { margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid #dce3df; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 h3 { margin: 0; font-size: 15px; }
 p { margin: 8px 0; }
+.technical-summary { margin-top: 12px; font-size: 12px; line-height: 1.6; }
+.technical-summary p { margin: 5px 0; }
 .entry + .entry { margin-top: 20px; }
 .role { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; margin: 2px 0 8px; color: #59636a; font-size: 12px; }
 .dates { white-space: nowrap; }
@@ -37,11 +39,15 @@ li { padding-left: 3px; margin: 4px 0; }
 <header><h1>Peter Bhabra</h1><p class="subtitle">Software Engineer | AI/ML &amp; Distributed Systems</p>
 <div class="contact"><span>London, United Kingdom</span><a href="https://www.linkedin.com/in/peter-bhabra/" target="_blank" rel="noopener">LinkedIn</a></div></header>
 <section><h2>Summary</h2><p>Software engineer with technical leadership experience in AI infrastructure and distributed systems. Currently leading inference platform development at Doubleword. Previously built high-availability data platforms processing 1M+ files daily at CMR Surgical.</p></section>
+<div class="technical-summary">
+<p><strong>Technologies:</strong> Rust, Python, SQL, TypeScript, React, PostgreSQL, Kubernetes, Docker, Helm, Terraform, AWS, GCP, Argo CD, GitHub Actions, vLLM, SGLang, Prometheus, Grafana, OpenTelemetry.</p>
+<p><strong>Specialisms:</strong> LLM inference, distributed systems, GPU scheduling, object storage, performance engineering, production operations.</p>
+</div>
 <section><h2>Experience</h2>
 <article class="entry doubleword-entry"><h3>Doubleword</h3><div class="role"><span>Member of Technical Staff</span><span class="dates">2023–Present</span></div><p>Built self-hosted inference products before moving to lead the core engineering team for Doubleword’s hosted inference platform.</p>
 <section class="product-phase"><div class="phase-heading"><h4>Hosted inference platform</h4><span class="dates">Late 2025–Present</span></div><ul>
-<li>Lead a five-person engineering team responsible for Doubleword’s core hosted inference platform, and have run hiring processes to grow the team.</li>
-<li>Own incident response and on-call coverage for a production inference service operating 24/7.</li>
+<li>Led a five-person engineering team responsible for Doubleword’s core hosted inference platform, and ran hiring processes to grow the team.</li>
+<li>Owned incident response and on-call coverage for a production inference service operating 24/7.</li>
 <li>Developed low-latency Rust backends for real-time and asynchronous inference, including an API gateway benchmarked at 450× faster than LiteLLM.</li>
 <li>Implemented durable request processing backed by PostgreSQL, covering dispatch, retries, completion, and failure handling.</li>
 <li>Designed and built scheduling systems that connect queued inference requests to available GPU capacity.</li>

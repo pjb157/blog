@@ -21,6 +21,43 @@
       }
     ]
   },
+  "skills": [
+    {
+      "name": "Technologies",
+      "keywords": [
+        "Rust",
+        "Python",
+        "SQL",
+        "TypeScript",
+        "React",
+        "PostgreSQL",
+        "Kubernetes",
+        "Docker",
+        "Helm",
+        "Terraform",
+        "AWS",
+        "GCP",
+        "Argo CD",
+        "GitHub Actions",
+        "vLLM",
+        "SGLang",
+        "Prometheus",
+        "Grafana",
+        "OpenTelemetry"
+      ]
+    },
+    {
+      "name": "Specialisms",
+      "keywords": [
+        "LLM inference",
+        "distributed systems",
+        "GPU scheduling",
+        "object storage",
+        "performance engineering",
+        "production operations"
+      ]
+    }
+  ],
   "work": [
     {
       "name": "Doubleword",
@@ -31,8 +68,8 @@
           "name": "Hosted inference platform",
           "period": "Late 2025–Present",
           "highlights": [
-            "Lead a five-person engineering team responsible for Doubleword’s core hosted inference platform, and have run hiring processes to grow the team.",
-            "Own incident response and on-call coverage for a production inference service operating 24/7.",
+            "Led a five-person engineering team responsible for Doubleword’s core hosted inference platform, and ran hiring processes to grow the team.",
+            "Owned incident response and on-call coverage for a production inference service operating 24/7.",
             "Developed low-latency Rust backends for real-time and asynchronous inference, including an API gateway benchmarked at 450× faster than LiteLLM.",
             "Implemented durable request processing backed by PostgreSQL, covering dispatch, retries, completion, and failure handling.",
             "Designed and built scheduling systems that connect queued inference requests to available GPU capacity."
