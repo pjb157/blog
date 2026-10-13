@@ -72,7 +72,7 @@
             "Owned incident response and on-call coverage for a production inference service operating 24/7.",
             "Developed low-latency Rust backends for real-time and asynchronous inference, including an API gateway benchmarked at 450× faster than LiteLLM.",
             "Implemented durable request processing backed by PostgreSQL, covering dispatch, retries, completion, and failure handling.",
-            "Designed and built scheduling systems that connect queued inference requests to available GPU capacity."
+            "Extended NVIDIA Dynamo to serve LLMs across SGLang and vLLM backends, covering request routing, overflow to external providers, and inference metrics and tracing."
           ]
         },
         {
